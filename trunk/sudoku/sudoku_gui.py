@@ -240,15 +240,10 @@ class SudokuFrame(wx.Frame):
         solution = solver.GetValue(selection)
         if solution is not None:
             self._hints += 1
-            self.canvas.SetMoves(self.canvas.GetMoves() + 1)
-            self.canvas.SetValue(selection, solution)
-            if not self._timer.IsRunning():
-                self.StartGame()
-            self.UpdateMoves()
-            self.canvas.CheckComplete()
+            self.canvas.MakeMove( selection, solution)
         else:
             wx.Bell()
-#            pass # TODO Show that no hints can be given
+            # TODO Show why no hints can be given
 
     def LoadPuzzle(self, board):
         """Load the given game board
@@ -607,6 +602,22 @@ class SudokuCanvas(wx.PyControl):
                      SudokuGameEvent(suEVT_MOVE_MADE, self.GetId()))
         self.Refresh()
 
+    def MakeMove(self, cell, val):
+        """Make a move
+        @param cell: cell index
+        @param val: (str) value
+
+        """
+        self._cells[cell].SetValue(val)
+        self._moves += 1
+        self.Refresh()
+        if self._moves == 1:
+            wx.PostEvent(self.GetParent(),
+                         SudokuGameEvent(suEVT_GAME_START, self.GetId()))
+        wx.PostEvent(self.GetParent(),
+                     SudokuGameEvent(suEVT_MOVE_MADE, self.GetId()))
+        self.CheckComplete()
+
     #---- Event Handlers ----#
 
     def OnKeyUp(self, evt):
@@ -618,16 +629,7 @@ class SudokuCanvas(wx.PyControl):
         if self._active is not None and \
            not evt.HasModifiers() and \
            key_code in SudokuCanvas.NUM_KEYS:
-            self._cells[self._active].SetValue(unichr(evt.GetUniChar()))
-            self._moves += 1
-            self.Refresh()
-            if self._moves == 1:
-                wx.PostEvent(self.GetParent(),
-                             SudokuGameEvent(suEVT_GAME_START, self.GetId()))
-            wx.PostEvent(self.GetParent(),
-                         SudokuGameEvent(suEVT_MOVE_MADE, self.GetId()))
-            self.CheckComplete()
-
+            self.MakeMove(self._active, unichr(evt.GetUniChar()))
         elif self._active is not None and \
              key_code in (wx.WXK_DELETE, wx.WXK_BACK):
             self._cells[self._active].SetValue('')
@@ -648,12 +650,6 @@ class SudokuCanvas(wx.PyControl):
 
             self._cells.ActivateCell(self._active)
             self.Refresh(False)
-#            r, c = self._cells.GetPosition(self._active)
-#            print "ROW:", self._cells.GetRowValues(r)
-#            print "COLUMN:", self._cells.GetColumnValues(c)
-#            block = 3*(r/3)+(c/3)
-#            print "BLOCK NUM:", block
-#            print "BLOCK:", self._cells.GetBlockValues(block)
         else:
             evt.Skip()
 
