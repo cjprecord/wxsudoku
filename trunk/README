@@ -1,0 +1,19 @@
+# Project: wxSudoku
+# Author: Cody Precord
+# License: wxWindows
+
+wxSudoku is a simple sudoku game that comes with over 3000 different puzzles.
+
+# Game Play
+
+
+
+# Requirements
+
+python 2.4 or higher
+wxPython 2.8+
+
+# Install
+
+see INSTALL
+

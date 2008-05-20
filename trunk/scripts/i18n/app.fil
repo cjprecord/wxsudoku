@@ -1,0 +1,7 @@
+../../sudoku/proj_info.py
+../../sudoku/puzzle.py
+../../sudoku/puzzledlg.py
+../../sudoku/solver.py
+../../sudoku/Sudoku.py
+../../sudoku/sudoku_cmn.py
+../../sudoku/sudoku_gui.py
