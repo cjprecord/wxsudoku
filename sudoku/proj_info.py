@@ -17,6 +17,5 @@ __revision__ = "$Revision$"
 AUTHOR = 'Cody Precord'
 VERSION = '0.1.0'
 PROG_NAME = 'wxSudoku'
-HOME_PAGE = "http://editra.org"
-#I18N_PAGE = "https://translations.launchpad.net/editra/trunk/+pots/editra"
+HOME_PAGE = "http://wxsudoku.googlecode.com"
 CONTACT_MAIL = "staff@editra.org"

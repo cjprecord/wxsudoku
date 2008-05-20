@@ -64,7 +64,7 @@ ICON = { 'Win' : "pixmaps/app/Sudoku.ico",
 }
 LICENSE = "wxWindows"
 NAME = "wxSudoku"
-URL = "http://editra.org"
+URL = "http://wxsudoku.googlecode.com"
 VERSION = info.VERSION
 CLASSIFIERS = [
             'Development Status :: 3 - Alpha',
@@ -208,7 +208,7 @@ else:
         maintainer=AUTHOR,
         maintainer_email=AUTHOR_EMAIL,
         url=URL,
-        download_url="http://editra.org/uploads/wxsudoku",
+        download_url="http://wxsudoku.googlecode.com/downloads/list",
         license=LICENSE,
         platforms=[ "Many" ],
         packages=[ NAME ],
