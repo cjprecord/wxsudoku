@@ -1,0 +1,10 @@
+include *.py *.pyw
+include CHANGELOG
+include COPYING
+include INSTALL
+include MANIFEST
+include README
+recursive-include locale *.mo
+recursive-include pixmaps *.png *.ico [A-Z]
+recursive-include scripts *.sh *.po *.py *.dat
+recursive-include sudoku *.py [A-Z]

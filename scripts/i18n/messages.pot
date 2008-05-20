@@ -1,0 +1,214 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2008-04-29 20:24-0500\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../../sudoku/sudoku_gui.py:188
+msgid "&About"
+msgstr ""
+
+#: ../../sudoku/sudoku_gui.py:155
+msgid "&Clear Puzzle"
+msgstr ""
+
+#: ../../sudoku/sudoku_gui.py:189 ../../sudoku/sudoku_gui.py:192
+msgid "&Help"
+msgstr ""
+
+#: ../../sudoku/sudoku_gui.py:153
+msgid "&New Puzzle"
+msgstr ""
+
+#: ../../sudoku/sudoku_gui.py:158
+msgid "&Open Puzzle"
+msgstr ""
+
+#: ../../sudoku/sudoku_gui.py:168
+msgid "&Puzzle"
+msgstr ""
+
+#: ../../sudoku/sudoku_gui.py:166
+msgid "&Quit"
+msgstr ""
+
+#: ../../sudoku/sudoku_gui.py:161
+msgid "&Save"
+msgstr ""
+
+#: ../../sudoku/sudoku_gui.py:188
+msgid "About"
+msgstr ""
+
+#: ../../sudoku/puzzledlg.py:118
+msgid "Cancel"
+msgstr ""
+
+#: ../../sudoku/sudoku_gui.py:173
+msgid "Change to easy puzzles"
+msgstr ""
+
+#: ../../sudoku/sudoku_gui.py:182
+msgid "Change to evil puzzles"
+msgstr ""
+
+#: ../../sudoku/sudoku_gui.py:179
+msgid "Change to hard puzzles"
+msgstr ""
+
+#: ../../sudoku/sudoku_gui.py:176
+msgid "Change to normal puzzles"
+msgstr ""
+
+#: ../../sudoku/sudoku_gui.py:128
+msgid "Clear Puzzle"
+msgstr ""
+
+#: ../../sudoku/sudoku_gui.py:268
+msgid "Congradulations!"
+msgstr ""
+
+#: ../../sudoku/sudoku_gui.py:687
+msgid "Copyright"
+msgstr ""
+
+#: ../../sudoku/puzzledlg.py:101 ../../sudoku/sudoku_gui.py:184
+msgid "Difficulty"
+msgstr ""
+
+#: ../../sudoku/puzzledlg.py:97 ../../sudoku/sudoku_gui.py:172
+msgid "Easy"
+msgstr ""
+
+#: ../../sudoku/puzzledlg.py:98 ../../sudoku/sudoku_gui.py:181
+msgid "Evil"
+msgstr ""
+
+#: ../../sudoku/sudoku_gui.py:281
+#, python-format
+msgid "Failed to save %s"
+msgstr ""
+
+#: ../../sudoku/sudoku_gui.py:132
+msgid "Get a hint"
+msgstr ""
+
+#: ../../sudoku/puzzledlg.py:98 ../../sudoku/sudoku_gui.py:178
+msgid "Hard"
+msgstr ""
+
+#: ../../sudoku/sudoku_gui.py:132
+msgid "Hints"
+msgstr ""
+
+#: ../../sudoku/sudoku_gui.py:679
+msgid "Homepage"
+msgstr ""
+
+#: ../../sudoku/sudoku_gui.py:681
+msgid "License: wxWindows (see COPYING.txt for full license)"
+msgstr ""
+
+#: ../../sudoku/sudoku_gui.py:159
+msgid "Load a saved puzzle"
+msgstr ""
+
+#: ../../sudoku/sudoku_gui.py:267
+#, python-format
+msgid "Moves: %(moves)d Total Time: %(time)s"
+msgstr ""
+
+#: ../../sudoku/sudoku_gui.py:330
+#, python-format
+msgid "Moves: %d"
+msgstr ""
+
+#: ../../sudoku/sudoku_gui.py:121
+msgid "New Puzzle"
+msgstr ""
+
+#: ../../sudoku/puzzledlg.py:97 ../../sudoku/sudoku_gui.py:175
+msgid "Normal"
+msgstr ""
+
+#: ../../sudoku/puzzledlg.py:113 ../../sudoku/sudoku_gui.py:123
+msgid "Open"
+msgstr ""
+
+#: ../../sudoku/sudoku_gui.py:249
+msgid "Open Puzzle"
+msgstr ""
+
+#: ../../sudoku/sudoku_gui.py:123
+msgid "Open a saved puzzle"
+msgstr ""
+
+#: ../../sudoku/sudoku_gui.py:680
+msgid "Platform Info"
+msgstr ""
+
+#: ../../sudoku/sudoku_gui.py:167
+#, python-format
+msgid "Quit %s"
+msgstr ""
+
+#: ../../sudoku/sudoku_gui.py:129 ../../sudoku/sudoku_gui.py:156
+msgid "Restart the current puzzle"
+msgstr ""
+
+#: ../../sudoku/puzzledlg.py:115
+msgid "Save"
+msgstr ""
+
+#: ../../sudoku/sudoku_gui.py:163
+msgid "Save &As"
+msgstr ""
+
+#: ../../sudoku/puzzledlg.py:107 ../../sudoku/sudoku_gui.py:164
+msgid "Save As"
+msgstr ""
+
+#: ../../sudoku/sudoku_gui.py:281
+msgid "Save Error"
+msgstr ""
+
+#: ../../sudoku/sudoku_gui.py:125 ../../sudoku/sudoku_gui.py:272
+msgid "Save Puzzle"
+msgstr ""
+
+#: ../../sudoku/sudoku_gui.py:162
+msgid "Save the current puzzle"
+msgstr ""
+
+#: ../../sudoku/sudoku_gui.py:125
+msgid "Save the puzzle"
+msgstr ""
+
+#: ../../sudoku/sudoku_gui.py:121 ../../sudoku/sudoku_gui.py:154
+msgid "Start a new puzzle"
+msgstr ""
+
+#: ../../sudoku/sudoku_gui.py:678
+#, python-format
+msgid "Written in 100%% Python."
+msgstr ""
+
+#: ../../sudoku/sudoku_gui.py:266
+msgid "You solved the puzzle!\n"
+msgstr ""
+
+#: ../../sudoku/Sudoku.py:74 ../../sudoku/sudoku_gui.py:677
+msgid "wxSudoku"
+msgstr ""

@@ -1,0 +1,22 @@
+# wxSudoku Install Guide
+
+#---- Source Install Any OS ----#
+
+wxSudoku doesn't need to be installed to be used. It can be run by running
+either Sudoku.py or Sudoku.pyw. If you wish to install it simply install it
+like any other python module.
+
+python setup.py install
+
+
+#---- OSX Install ----#
+
+1) Double click on the disk image (dmg)
+2) Copy the app to your Applications Folder
+3) Eject the disk image
+
+
+#---- Windows Install ----#
+
+1) Double click on the installer
+2) Follow the on screen instructions
