@@ -17,6 +17,7 @@ __scid__ = "$Id$"
 
 #-----------------------------------------------------------------------------#
 # Imports
+import os
 import wx
 
 # Local Imports
@@ -41,6 +42,9 @@ VALID_DIFFICULTIES = (puzzle.DIFFICULTY_EASY, puzzle.DIFFICULTY_NORMAL,
 
 DIFFICULTY_STRINGS = ("Easy", "Normal", "Hard", "Evil")
 
+# Other Menu Id's
+ID_FEEDBACK = wx.NewId()
+
 #-----------------------------------------------------------------------------#
 # Debugging Functions
 
@@ -56,7 +60,10 @@ def DebugP(msg):
 # File Functions
 
 def ReadPuzzleFile(path):
-    """Read the puzzle text from the given file
+    """Read the puzzle text from the given puzzle file
+    The file should be ordered as follows
+    line 1: original puzzle
+    line 2: current state
     @param path: Path to puzzle file
     @return: string
 
@@ -64,22 +71,23 @@ def ReadPuzzleFile(path):
     txt = ''
     try:
         file_h = open(path, "rb")
-        txt = file_h.readline()
+        txt = [line.strip() for line in file_h.readlines()]
         file_h.close()
     except (IOError, OSError, AttributeError):
         return txt
-    return txt.strip()
+    return txt
 
-def WritePuzzleFile(path, txt):
+def WritePuzzleFile(path, txt1, txt2):
     """Write out the given game file
     @param path: Path to write to
-    @param txt: Puzzle Text
+    @param txt1: Original Puzzle Text
+    @param txt2: Current Puzzle Text
     @return: bool
 
     """
     try:
         file_h = open(path, "wb")
-        txt = file_h.write(txt)
+        txt = file_h.write(os.linesep.join((txt1, txt2)))
         file_h.close()
     except (IOError, OSError, AttributeError):
         return False

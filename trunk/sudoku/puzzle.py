@@ -273,16 +273,25 @@ class PuzzleManager(object):
     def GetNewPuzzle(self, diff=DIFFICULTY_NORMAL):
         """Get a new random game board
         @keyword diff: Puzzle difficulty rating
-        @return: string
+        @return: (puzzle id, puzzle string)
 
         """
+        puzzleid = 0
         board = ''
         puzzles = self._boards.get(diff, None)
         if puzzles is not None:
             npuzzles = len(puzzles) - 1
             if npuzzles >= 0:
-                board = puzzles[random.randint(0, npuzzles)]
-        return board
+                puzzleid = random.randint(0, npuzzles)
+                board = puzzles[puzzleid]
+        return (puzzleid, board)
+
+    def GetPuzzleData(self):
+        """Get the dictionary of all loaded puzzles
+        @return: dict
+
+        """
+        return self._boards
 
     def GetPuzzles(self, difficulty):
         """Get the list of puzzles for the given difficulty
@@ -324,16 +333,12 @@ class PuzzleManager(object):
                         pass
                 f_handle.close()
             except Exception, msg:
-                DebugP("[sudoku][info] Failed to load %s" % fname)
-                DebugP("[sudoku][info] %s" % msg)
                 puzzles = None
 
         if puzzles is None:
             puzzles = PUZZLES
 
         self._boards = puzzles
-        DebugP("[sudoku][info] Loaded %d Puzzles" % \
-               sum([len(val) for val in puzzles.values()]))
         return True
 
 # Create a PuzzleManager instance to use as a singleton

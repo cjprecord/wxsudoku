@@ -82,6 +82,7 @@ class PuzzleDialog(wx.Dialog):
         if self._style == PD_OPEN:
             self.Bind(wx.EVT_UPDATE_UI, self.OnUpdateUI, id=wx.ID_OPEN)
             self.Bind(wx.EVT_CHOICE, self.OnChoice)
+            self.Bind(wx.EVT_LISTBOX_DCLICK, self.OnListBoxActivate)
         else:
             self.Bind(wx.EVT_UPDATE_UI, self.OnUpdateUI, id=wx.ID_SAVE)
             self.Bind(wx.EVT_LISTBOX,
@@ -140,6 +141,7 @@ class PuzzleDialog(wx.Dialog):
         e_id = evt.GetId()
         if e_id == wx.ID_OPEN:
             fname = self._list.GetStringSelection()
+            sudoku_cmn.DebugP("[sudoku][info] Selected %s" % fname)
             self._file = os.path.join(self._path,
                                       sudoku_cmn.DIFFICULTY_STRINGS[self._diff],
                                       fname)
@@ -154,6 +156,7 @@ class PuzzleDialog(wx.Dialog):
         elif e_id == wx.ID_DELETE:
             fname = self._list.GetStringSelection()
             if fname:
+                sudoku_cmn.DebugP("[sudoku][info] Deleting %s" % fname)
                 path = os.path.join(self._path,
                                     sudoku_cmn.DIFFICULTY_STRINGS[self._diff],
                                     fname)
@@ -177,6 +180,18 @@ class PuzzleDialog(wx.Dialog):
         self._diff = evt.GetSelection()
         idx = sudoku_cmn.DIFFICULTY_STRINGS[self._diff]
         self._list.SetItems(self._games[idx])
+
+    def OnListBoxActivate(self, evt):
+        """Select the file to open and dismiss the dialog
+        @param evt: EVT_LISTBOX_DCLICK
+
+        """
+        fname = self._list.GetStringSelection()
+        sudoku_cmn.DebugP("[sudoku][info] DClick Selected %s" % fname)
+        self._file = os.path.join(self._path,
+                                  sudoku_cmn.DIFFICULTY_STRINGS[self._diff],
+                                  fname)
+        self.EndModal(wx.ID_OPEN)
 
     def OnUpdateUI(self, evt):
         """Handle UpdateUI events for the open/save buttons

@@ -17,8 +17,10 @@ __scid__ = "$Id$"
 
 #-----------------------------------------------------------------------------#
 # Imports
+import os
 import sys
 import time
+import webbrowser
 import wx
 
 # Local Imports
@@ -71,11 +73,12 @@ class SudokuFrame(wx.Frame):
 
         # Layout
         self.__DoLayout()
+        puzzles = puzzle.ThePuzzleManager.GetPuzzleData()
+        sudoku_cmn.DebugP("[sudoku][info] Loaded %d Puzzles" % \
+                          sum(len(val) for val in puzzles.values()))
 
         # Setup
-        icon = wx.EmptyIcon()
-        icon.CopyFromBitmap(Icons.getSudokuBitmap())
-        self.SetIcon(icon)
+        self.SetIcon(wx.IconFromBitmap(Icons.getSudokuBitmap()))
         self.NewGame()
 
         # Event Handlers
@@ -87,6 +90,11 @@ class SudokuFrame(wx.Frame):
         self.Bind(wx.EVT_MENU, self.OnSave, id=wx.ID_SAVE)
         self.Bind(wx.EVT_MENU, self.OnSave, id=wx.ID_SAVEAS)
         self.Bind(wx.EVT_MENU, lambda evt: self.GiveHint(), id=wx.ID_HELP)
+        self.Bind(wx.EVT_MENU,
+                  lambda evt: webbrowser.open("mailto:%s" % proj_info.CONTACT_MAIL),
+                  id=sudoku_cmn.ID_FEEDBACK)
+        self.Bind(wx.EVT_MENU,
+                  lambda evt: webbrowser.open(proj_info.HOME_PAGE), id=wx.ID_HOME)
         self.Bind(wx.EVT_MENU, lambda evt: AboutBox(), id=wx.ID_ABOUT)
         self.Bind(wx.EVT_MENU,
                   lambda evt: self.SetDifficulty(sudoku_cmn.DIFF_MAP[sudoku_cmn.ID_EASY]),
@@ -193,6 +201,11 @@ class SudokuFrame(wx.Frame):
         helpm.Append(wx.ID_ABOUT, _("&About") + u"...", _("About") + u"...")
         helpm.Append(wx.ID_HELP, _("&Get Hint") + u"\tCtrl+G",
                      _("Get hint for selected square"))
+        helpm.AppendSeparator()
+        helpm.Append(wx.ID_HOME, _("Visit Project Homepage"),
+                     _("Open webrowser to %s") % proj_info.HOME_PAGE)
+        helpm.Append(sudoku_cmn.ID_FEEDBACK, _("Feedback"),
+                     _("Send an email to the author"))
         menub.Append(helpm, _("&Help"))
 
         if wx.Platform == '__WXMAC__':
@@ -253,13 +266,17 @@ class SudokuFrame(wx.Frame):
         self.StopGameTimer()
         self._hints = 0
         self.canvas.InitializeBoard(board)
+        if self._gamefile:
+            name = os.path.split(self._gamefile)[-1]
+            self.SetTitle(proj_info.PROG_NAME + " - " + name)
 
     def NewGame(self):
         """Load a new random game board"""
         self.StopGameTimer()
-        pstr = puzzle.ThePuzzleManager.GetNewPuzzle(self._difficulty)
+        pid, pstr = puzzle.ThePuzzleManager.GetNewPuzzle(self._difficulty)
         self.canvas.InitializeBoard(pstr)
         self._hints = 0
+        self.SetTitle(proj_info.PROG_NAME + " - " + _("Puzzle #%d") % pid)
 
     def OnClose(self, evt):
         """Handle when the dialog is closing"""
@@ -277,10 +294,13 @@ class SudokuFrame(wx.Frame):
             fname = dlg.GetPuzzleFile()
             difficulty = dlg.GetPuzzleDifficulty()
             board = sudoku_cmn.ReadPuzzleFile(fname)
-            if board:
+            if len(board) == 2:
                 self._difficulty = difficulty
                 self._gamefile = fname
-                self.LoadPuzzle(board)
+                self.LoadPuzzle(board[0])
+                for idx, val in enumerate(board[1]):
+                    if val != '.':
+                        self.canvas.SetValue(idx, val)
         dlg.Destroy()
 
     def OnPuzzleSoved(self, evt):
@@ -306,13 +326,16 @@ class SudokuFrame(wx.Frame):
 
             if dlg.ShowModal() == wx.ID_SAVE:
                 self._gamefile = dlg.GetPuzzleFile()
+                initial = self.canvas.GetInitialState()
                 board = str(self.canvas.GetPuzzleBoard())
-                if not sudoku_cmn.WritePuzzleFile(self._gamefile, board):
+                if not sudoku_cmn.WritePuzzleFile(self._gamefile,
+                                                  initial, board):
                     wx.MessageBox(_("Failed to save %s") % self._gamefile,
                                   _("Save Error"))
             dlg.Destroy()
         elif e_id == wx.ID_SAVE:
             sudoku_cmn.WritePuzzleFile(self._gamefile,
+                                       self.canvas.GetInitialState(),
                                        str(self.canvas.GetPuzzleBoard()))
         else:
             evt.Skip()
@@ -493,6 +516,13 @@ class SudokuCanvas(wx.PyControl):
                 return idx
         return None
 
+    def GetInitialState(self):
+        """Get the string that represents the intial state of the game board
+        when it was first loaded.
+
+        """
+        return self._board
+
     def GetPuzzleBoard(self):
         """Get the L{puzzle.PuzzleBoard} of L{puzzle.CellData} which represents
         the current state of the puzzle.
@@ -588,6 +618,7 @@ class SudokuCanvas(wx.PyControl):
         self.Enable()
         cords = self.__CalculateCords()
         cell_list = puzzle.PuzzleBoard()
+
         self._board = state
         for cell, val in enumerate(state):
             cord = cords[cell]
