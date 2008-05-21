@@ -9,10 +9,10 @@
 ;------------------------------ Start MUI Setup -------------------------------
 
 ; Global Variables
-!define PRODUCT_NAME "Sudoku"
+!define PRODUCT_NAME "wxSudoku"
 !define PRODUCT_VERSION "0.1"
 !define PRODUCT_PUBLISHER "Cody Precord"
-!define PRODUCT_WEB_SITE "http://editra.org"
+!define PRODUCT_WEB_SITE "http://wxsudoku.googlecode.com"
 !define PRODUCT_DIR_REGKEY "Software\Microsoft\Windows\CurrentVersion\App Paths\${PRODUCT_NAME}.exe"
 !define PRODUCT_UNINST_KEY "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}"
 !define PRODUCT_UNINST_ROOT_KEY "HKLM"
@@ -64,7 +64,7 @@ SetCompressor lzma
 
 ;---- Constants
 Name "${PRODUCT_NAME} ${PRODUCT_VERSION}"
-OutFile "sudoku.win32.${PRODUCT_VERSION}.exe"
+OutFile "wxsudoku.win32.${PRODUCT_VERSION}.exe"
 InstallDir "$PROGRAMFILES\wxSudoku"
 InstallDirRegKey HKLM "${PRODUCT_DIR_REGKEY}" ""
 ShowInstDetails show

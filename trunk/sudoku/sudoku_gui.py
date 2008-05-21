@@ -252,8 +252,9 @@ class SudokuFrame(wx.Frame):
         solver = SudokuSolver(str(board))
         solution = solver.GetValue(selection)
         if solution is not None:
-            self._hints += 1
-            self.canvas.MakeMove( selection, solution)
+            if solution != self.canvas.GetCellValue(selection):
+                self._hints += 1
+                self.canvas.MakeMove( selection, solution)
         else:
             wx.Bell()
             # TODO Show why no hints can be given
@@ -533,6 +534,13 @@ class SudokuCanvas(wx.PyControl):
                 return idx
         return None
 
+    def GetCellValue(self, cell):
+        """Get the value of the given cell
+        @param cell: cell index (int)
+
+        """
+        return self._cells[cell].GetValue()
+
     def GetInitialState(self):
         """Get the string that represents the intial state of the game board
         when it was first loaded.
@@ -656,12 +664,13 @@ class SudokuCanvas(wx.PyControl):
         @param val: (str) value
 
         """
-        self._cells[cell].SetValue(val)
-        self._moves += 1
-        self.Refresh()
-        wx.PostEvent(self.GetParent(),
-                     SudokuGameEvent(suEVT_MOVE_MADE, self.GetId()))
-        self.CheckComplete()
+        if self.GetCellValue(cell) != val:
+            self._cells[cell].SetValue(val)
+            self._moves += 1
+            self.Refresh()
+            wx.PostEvent(self.GetParent(),
+                         SudokuGameEvent(suEVT_MOVE_MADE, self.GetId()))
+            self.CheckComplete()
 
     #---- Event Handlers ----#
 

@@ -83,8 +83,7 @@ CLASSIFIERS = [
 # Py2App/Py2exe Data Files
 DATA_FILES = [("pixmaps", ["pixmaps/app/Sudoku.png", "pixmaps/app/Sudoku.ico",
                            "pixmaps/app/Sudoku.icns"]),
-              "puzzles.dat", "INSTALL", "README", "CHANGELOG",
-              "COPYING"
+              "INSTALL", "README", "CHANGELOG", "COPYING"
              ]
 
 # Py2Exe manifest

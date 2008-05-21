@@ -103,6 +103,13 @@ class CellData(object):
         """
         return (self.x, self.y, self.w, self.h)
 
+    def GetValue(self):
+        """Get the cells value
+        @return: str
+
+        """
+        return self.val
+
     def SetValue(self, val):
         """Set the cells value
         @param val: string
