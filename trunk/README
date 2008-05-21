@@ -4,9 +4,31 @@
 
 wxSudoku is a simple sudoku game that comes with over 3000 different puzzles.
 
+# Introduction / Rules
+
+Reference: http://en.wikipedia.org/wiki/Sudoku
+
+Sudoku is a logic-based number placement puzzle. The objective is to fill a 9×9
+grid so that each column, each row, and each of the nine 3×3 boxes (also called
+blocks or regions) contains the digits from 1 to 9 only one time each. The
+puzzle setter provides a partially completed grid.
+
 # Game Play
 
+Playing wxSudoku is done by clicking on and selecting an empty square and
+entering a digit. This continues until all squares are filled with the correct
+digits.
 
+# Controls
+
+Mouse Left Button: Select Square
+Left Arrow:        Move selection square left
+Right Arrow:       Move selection square right
+Up Arrow:          Move selection square up
+Down Arrow:        Move seelction square down
+Number Keys:       Enter Digit 1-9
+Backspace:         Clear digit from selected square
+Delete:            Clear digit from selected square
 
 # Requirements
 
