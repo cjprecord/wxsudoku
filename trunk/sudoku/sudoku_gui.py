@@ -1,6 +1,6 @@
 ###############################################################################
 # Name: sudoku_gui.py                                                         #
-# Purpose:                                     #
+# Purpose: The main gui objects used by the game                              #
 # Author: Cody Precord <cprecord@editra.org>                                  #
 # Copyright: (c) 2008 Cody Precord <staff@editra.org>                         #
 # License: wxWindows License                                                  #
@@ -43,8 +43,8 @@ class SudokuGameEvent(wx.PyCommandEvent):
         wx.PyCommandEvent.__init__(self, eventType, id)
 
 # Event Types
-suEVT_GAME_START = wx.NewEventType()
-EVT_GAME_START = wx.PyEventBinder(suEVT_GAME_START, 1)
+suEVT_NEW_BOARD = wx.NewEventType()
+EVT_NEW_BOARD = wx.PyEventBinder(suEVT_NEW_BOARD, 1)
 
 suEVT_MOVE_MADE = wx.NewEventType()
 EVT_MOVE_MADE = wx.PyEventBinder(suEVT_MOVE_MADE, 1)
@@ -114,8 +114,8 @@ class SudokuFrame(wx.Frame):
             self.Bind(wx.EVT_UPDATE_UI, self.OnUpdateDiffUI, id=menu_id)
 
         # Game Event Handlers
-        self.Bind(EVT_GAME_START, lambda evt: self.StartGame())
-        self.Bind(EVT_MOVE_MADE, lambda evt: self.UpdateMoves())
+        self.Bind(EVT_NEW_BOARD, lambda evt: self.UpdateMoves())
+        self.Bind(EVT_MOVE_MADE, self.OnMove)
         self.Bind(EVT_GAME_COMPLETE, self.OnPuzzleSoved)
 
     def __del__(self):
@@ -276,6 +276,7 @@ class SudokuFrame(wx.Frame):
         pid, pstr = puzzle.ThePuzzleManager.GetNewPuzzle(self._difficulty)
         self.canvas.InitializeBoard(pstr)
         self._hints = 0
+        self._gamefile = None
         self.SetTitle(proj_info.PROG_NAME + " - " + _("Puzzle #%d") % pid)
 
     def OnClose(self, evt):
@@ -283,6 +284,12 @@ class SudokuFrame(wx.Frame):
         wx.GetApp().Set('WINPOS', self.GetPositionTuple())
         wx.GetApp().Save()
         evt.Skip()
+
+    def OnMove(self, evt):
+        """Handle when a move is made in the canvas"""
+        if not self._timer.IsRunning():
+            self._timer.Start(1000)
+        self.UpdateMoves()
 
     def OnOpen(self, evt):
         """Open a saved puzzle"""
@@ -294,13 +301,15 @@ class SudokuFrame(wx.Frame):
             fname = dlg.GetPuzzleFile()
             difficulty = dlg.GetPuzzleDifficulty()
             board = sudoku_cmn.ReadPuzzleFile(fname)
-            if len(board) == 2:
-                self._difficulty = difficulty
-                self._gamefile = fname
-                self.LoadPuzzle(board[0])
-                for idx, val in enumerate(board[1]):
-                    if val != '.':
-                        self.canvas.SetValue(idx, val)
+            self._difficulty = difficulty
+            self._gamefile = fname
+            self.LoadPuzzle(board.get('initial', ''))
+            for idx, val in enumerate(board.get('current', '')):
+                if val != '.':
+                    self.canvas.SetValue(idx, val)
+            self.canvas.SetMoves(board.get('moves', 0))
+            self._hints = board.get('hints', 0)
+            self._time = board.get('time', 0)
         dlg.Destroy()
 
     def OnPuzzleSoved(self, evt):
@@ -326,17 +335,24 @@ class SudokuFrame(wx.Frame):
 
             if dlg.ShowModal() == wx.ID_SAVE:
                 self._gamefile = dlg.GetPuzzleFile()
-                initial = self.canvas.GetInitialState()
-                board = str(self.canvas.GetPuzzleBoard())
-                if not sudoku_cmn.WritePuzzleFile(self._gamefile,
-                                                  initial, board):
+                state = dict(initial=self.canvas.GetInitialState(),
+                             current=str(self.canvas.GetPuzzleBoard()),
+                             moves=self.canvas.GetMoves(),
+                             hints=self._hints,
+                             time=self._time)
+                             
+                if not sudoku_cmn.WritePuzzleFile(self._gamefile, state):
                     wx.MessageBox(_("Failed to save %s") % self._gamefile,
                                   _("Save Error"))
             dlg.Destroy()
         elif e_id == wx.ID_SAVE:
-            sudoku_cmn.WritePuzzleFile(self._gamefile,
-                                       self.canvas.GetInitialState(),
-                                       str(self.canvas.GetPuzzleBoard()))
+            state = dict(initial=self.canvas.GetInitialState(),
+                         current=str(self.canvas.GetPuzzleBoard()),
+                         moves=self.canvas.GetMoves(),
+                         hints=self._hints,
+                         time=self._time)
+
+            sudoku_cmn.WritePuzzleFile(self._gamefile, state)
         else:
             evt.Skip()
 
@@ -439,7 +455,8 @@ class SudokuCanvas(wx.PyControl):
                 rec_list.append((column * csize, row * csize, csize, csize))
         return rec_list
 
-    def __DrawOneCell(self, gc, cell):
+    @staticmethod
+    def __DrawOneCell(gc, cell):
         """Draw one cell
         @param gc: GCDC to draw in
         @param cell: L{puzzle.CellData} object
@@ -630,7 +647,7 @@ class SudokuCanvas(wx.PyControl):
         self._cells = cell_list
         self._moves = 0
         wx.PostEvent(self.GetParent(),
-                     SudokuGameEvent(suEVT_MOVE_MADE, self.GetId()))
+                     SudokuGameEvent(suEVT_NEW_BOARD, self.GetId()))
         self.Refresh()
 
     def MakeMove(self, cell, val):
@@ -642,9 +659,6 @@ class SudokuCanvas(wx.PyControl):
         self._cells[cell].SetValue(val)
         self._moves += 1
         self.Refresh()
-        if self._moves == 1:
-            wx.PostEvent(self.GetParent(),
-                         SudokuGameEvent(suEVT_GAME_START, self.GetId()))
         wx.PostEvent(self.GetParent(),
                      SudokuGameEvent(suEVT_MOVE_MADE, self.GetId()))
         self.CheckComplete()

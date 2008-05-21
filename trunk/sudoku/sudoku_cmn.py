@@ -18,6 +18,7 @@ __scid__ = "$Id$"
 #-----------------------------------------------------------------------------#
 # Imports
 import os
+import cPickle
 import wx
 
 # Local Imports
@@ -60,35 +61,38 @@ def DebugP(msg):
 # File Functions
 
 def ReadPuzzleFile(path):
-    """Read the puzzle text from the given puzzle file
-    The file should be ordered as follows
-    line 1: original puzzle
-    line 2: current state
+    """Read the puzzle state from the given puzzle file
     @param path: Path to puzzle file
-    @return: string
+    @return: dict('initial':'', 'current':'', 'moves':0, 'hints':0, 'time':0)
 
     """
-    txt = ''
-    try:
-        file_h = open(path, "rb")
-        txt = [line.strip() for line in file_h.readlines()]
-        file_h.close()
-    except (IOError, OSError, AttributeError):
-        return txt
-    return txt
+    if os.path.exists(path):
+        try:
+            fhandle = open(path, 'rb')
+            val = cPickle.load(fhandle)
+            fhandle.close()
+        except (IOError, SystemError, OSError,
+                cPickle.UnpicklingError, EOFError), msg:
+            sudoku_cmn.DebugP("[sudoku][err] %s" % msg)
+        else:
+            return val
 
-def WritePuzzleFile(path, txt1, txt2):
+    # Load failed
+    return dict(initial='', current='', moves=0, hints=0, time=0)
+
+def WritePuzzleFile(path, state):
     """Write out the given game file
     @param path: Path to write to
-    @param txt1: Original Puzzle Text
-    @param txt2: Current Puzzle Text
+    @param state: Puzzle state (dict)
     @return: bool
 
     """
     try:
-        file_h = open(path, "wb")
-        txt = file_h.write(os.linesep.join((txt1, txt2)))
-        file_h.close()
-    except (IOError, OSError, AttributeError):
+        fhandle = open(path, 'wb')
+        cPickle.dump(state, fhandle, cPickle.HIGHEST_PROTOCOL)
+        fhandle.close()
+    except (IOError, cPickle.PickleError), msg:
+        sudoku_cmn.DebugP("[sudoku][err] %s" % msg)
         return False
-    return True
+    else:
+        return True
