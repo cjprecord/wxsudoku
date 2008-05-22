@@ -1,0 +1,14 @@
+#summary Screenshots
+
+= Introduction =
+
+Some screenshots of the application.
+
+
+== Windows ==
+
+
+== Macintosh OS X ==
+
+
+== Linux ==
